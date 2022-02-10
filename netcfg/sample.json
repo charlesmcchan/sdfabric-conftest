@@ -1,0 +1,239 @@
+{
+    "devices": {
+      "device:leaf1": {
+        "segmentrouting": {
+          "ipv4NodeSid": 201,
+          "ipv4Loopback": "10.128.100.38",
+          "routerMac": "00:00:0A:80:64:26",
+          "pairDeviceId": "device:leaf2",
+          "pairLocalPort": 164,
+          "isEdgeRouter": true,
+          "adjacencySids": []
+        },
+        "basic": {
+          "name": "Leaf 1",
+          "managementAddress": "grpc://10.128.100.38:9339?device_id=1",
+          "driver": "stratum-tofino",
+          "pipeconf": "org.stratumproject.fabric-upf-int.montara_sde_9_7_0",
+          "locType": "grid",
+          "gridX": 300,
+          "gridY": 600
+        }
+      },
+      "device:leaf2": {
+        "segmentrouting": {
+          "ipv4NodeSid": 202,
+          "ipv4Loopback": "10.128.100.36",
+          "routerMac": "00:00:0A:80:64:26",
+          "pairDeviceId": "device:leaf1",
+          "pairLocalPort": 292,
+          "isEdgeRouter": true,
+          "adjacencySids": []
+        },
+        "basic": {
+          "name": "Leaf 2",
+          "managementAddress": "grpc://10.128.100.36:9339?device_id=1",
+          "driver": "stratum-tofino",
+          "pipeconf": "org.stratumproject.fabric-upf-int.mavericks_sde_9_7_0",
+          "locType": "grid",
+          "gridX": 700,
+          "gridY": 600
+        }
+      }
+    },
+    "ports": {
+      "device:leaf1/164": {
+        "interfaces": [{
+          "ips": [
+            "192.168.101.254/24",
+            "192.168.102.254/24",
+            "192.168.104.254/24"
+          ],
+          "vlan-tagged": [101, 102, 104],
+          "name": "to-leaf2-pair"
+        }]
+      },
+      "device:leaf1/128": {
+        "interfaces": [{
+          "ips": [
+            "192.168.102.254/24"
+          ],
+          "vlan-untagged": 102,
+          "name": "tost-mgmt-10g-1"
+        }]
+      },
+      "device:leaf1/130": {
+        "interfaces": [{
+          "ips": [
+            "192.168.102.254/24"
+          ],
+          "vlan-untagged": 102,
+          "name": "enb1"
+        }]
+      },
+      "device:leaf1/136": {
+        "interfaces": [{
+          "ips": [
+            "192.168.101.254/24"
+          ],
+          "vlan-untagged": 101,
+          "name": "tost-mgmt-40g-1"
+        }]
+      },
+      "device:leaf1/144": {
+        "interfaces": [{
+          "ips": [
+            "192.168.101.254/24"
+          ],
+          "vlan-untagged": 101,
+          "name": "lotta-nics-xl710c7p1"
+        }]
+      },
+      "device:leaf1/180": {
+        "interfaces": [{
+          "ips": [
+            "192.168.101.254/24"
+          ],
+          "vlan-untagged": 101,
+          "name": "ng40-eNB"
+        }]
+      },
+      "device:leaf1/188": {
+        "interfaces": [{
+          "ips": [
+            "192.168.103.254/24"
+          ],
+          "vlan-untagged": 103,
+          "name": "ng40-app"
+        }]
+      },
+      "device:leaf2/292": {
+        "interfaces": [{
+          "ips": [
+            "192.168.101.254/24",
+            "192.168.102.254/24",
+            "192.168.104.254/24"
+          ],
+          "vlan-tagged": [101, 102, 104],
+          "name": "to-leaf1-pair"
+        }]
+      },
+      "device:leaf2/256": {
+        "interfaces": [{
+          "ips": [
+            "192.168.102.254/24"
+          ],
+          "vlan-untagged": 102,
+          "name": "tost-mgmt-10g-2"
+        }]
+      },
+      "device:leaf2/264": {
+        "interfaces": [{
+          "ips": [
+            "192.168.102.254/24"
+          ],
+          "vlan-untagged": 102,
+          "name": "tost-mgmt-40g-2"
+        }]
+      },
+      "device:leaf2/288": {
+        "interfaces": [{
+          "ips": [
+            "192.168.104.254/24"
+          ],
+          "vlan-untagged": 104,
+          "name": "lotta-nics-xl710c2p1"
+        }]
+      },
+      "device:leaf2/272": {
+        "interfaces": [{
+          "ips": [
+            "192.168.102.254/24"
+          ],
+          "vlan-untagged": 102,
+          "name": "lotta-nics-xl710c7p2"
+        }]
+      }
+    },
+    "hosts": {
+      "52:54:00:2a:22:d6/None": {
+        "basic": {
+          "name": "ng40-enb",
+          "ips": [
+            "192.168.101.101",
+            "192.168.101.102",
+            "192.168.101.103"
+          ],
+          "locations": [
+            "device:leaf1/180"
+          ]
+        }
+      },
+      "52:54:00:60:b0:bc/None": {
+        "basic": {
+          "name": "app",
+          "ips": [
+            "192.168.103.101",
+            "192.168.103.121",
+            "192.168.103.122",
+            "192.168.103.123"
+          ],
+          "locations": [
+            "device:leaf1/188"
+          ]
+        }
+      }
+    },
+    "apps": {
+    "org.onosproject.route-service": {
+        "routes": [
+          {
+            "prefix": "0.0.0.0/0",
+            "nextHop": "192.168.102.2"
+          }
+        ]
+      },
+      "org.omecproject.up4": {
+        "up4": {
+          "devices": [
+            "device:leaf1",
+            "device:leaf2"
+          ],
+          "s1uAddr": "192.168.102.254",
+          "uePools": [
+            "10.250.0.0/16"
+          ]
+        }
+      },
+      "org.onosproject.dhcprelay": {
+        "default": [
+          {
+            "dhcpServerConnectPoint": "device:leaf2/256",
+            "serverIps": [
+              "192.168.102.2"
+            ]
+          },
+          {
+            "dhcpServerConnectPoint": "device:leaf1/128",
+            "serverIps": [
+              "192.168.102.2"
+            ]
+          }
+        ]
+      },
+      "org.stratumproject.fabric.tna.inbandtelemetry": {
+        "report": {
+          "collectorIp": "192.168.104.1",
+          "collectorPort": 32766,
+          "minFlowHopLatencyChangeNs": 1048575,
+          "watchSubnets": [
+              "192.168.0.0/16",
+              "10.240.0.0/16"
+          ],
+          "queueReportLatencyThresholds": {
+            "0": {"triggerNs": 2000, "resetNs": 500}
+          }
+        }
+      }
+    }
+  }
